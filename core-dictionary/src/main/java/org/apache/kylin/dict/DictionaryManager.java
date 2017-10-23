@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.NavigableSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
+//import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -130,8 +130,12 @@ public class DictionaryManager {
             } else {
                 return result;
             }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e.getCause());
+//        }
+//        catch (ExecutionException e) {
+//            return null;
+//            throw new RuntimeException(e.getCause());
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -450,8 +454,14 @@ public class DictionaryManager {
         ResourceStore store = MetadataManager.getInstance(config).getStore();
 
         logger.info("DictionaryManager(" + System.identityHashCode(this) + ") loading DictionaryInfo(loadDictObj:" + loadDictObj + ") at " + resourcePath);
-        DictionaryInfo info = store.getResource(resourcePath, DictionaryInfo.class, loadDictObj ? DictionaryInfoSerializer.FULL_SERIALIZER : DictionaryInfoSerializer.INFO_SERIALIZER);
-        return info;
+        try {
+            DictionaryInfo info = store.getResource(resourcePath, DictionaryInfo.class, loadDictObj ? DictionaryInfoSerializer.FULL_SERIALIZER : DictionaryInfoSerializer.INFO_SERIALIZER);
+            return info;
+        } catch (Exception ex) {
+            return null;
+        }
+//        DictionaryInfo info = store.getResource(resourcePath, DictionaryInfo.class, loadDictObj ? DictionaryInfoSerializer.FULL_SERIALIZER : DictionaryInfoSerializer.INFO_SERIALIZER);
+//        return info;
     }
 
 }
